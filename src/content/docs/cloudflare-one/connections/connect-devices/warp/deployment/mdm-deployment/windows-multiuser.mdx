@@ -1,0 +1,104 @@
+---
+pcx_content_type: concept
+title: Multiple users on a Windows device
+sidebar:
+  order: 3
+---
+
+import { Details, Render } from "~/components";
+
+<Details header="Feature availability">
+
+| [WARP modes](/cloudflare-one/connections/connect-devices/warp/configure-warp/warp-modes/) | [Zero Trust plans](https://www.cloudflare.com/teams-pricing/) |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| All modes                                                                                 | All plans                                                     |
+
+| System   | Availability | Minimum WARP version |
+| -------- | ------------ | -------------------- |
+| Windows  | ✅           | 2024.6.415.0         |
+| macOS    | ❌           |                      |
+| Linux    | ❌           |                      |
+| iOS      | ❌           |                      |
+| Android  | ❌           |                      |
+| ChromeOS | ❌           |                      |
+
+</Details>
+
+Cloudflare WARP supports multiple user registrations on a single Windows device. When deployed in multi-user mode, the WARP client will automatically switch user registrations after a user logs in to their Windows account. All traffic to Cloudflare will be attributed to the currently active Windows user. This allows administrators to apply identity-based policies and device settings, audit user activity, and remove individual users from a shared workstation.
+
+:::note
+A user must log out of their Windows account before switching to another account. A user cannot lock the screen and log in to another account, use the **Switch users** option in Windows, or have any other type of concurrent sessions.
+:::
+
+## Enable multi-user mode
+
+To enable multi-user support on Windows, [deploy an MDM file](/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/#windows) onto the device with the `multi_user` key set to `true`. For example:
+
+```xml
+<dict>
+  <key>multi_user</key>
+	<true/>
+  <key>organization</key>
+  <string>your-team-name</string>
+  <key>onboarding</key>
+  <false/>
+</dict>
+```
+
+To use multi-user mode alongside the [Windows pre-login](/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-prelogin/) and [Switch between Zero Trust organizations](/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/switch-organizations/) options:
+
+```xml
+<dict>
+  <key>multi_user</key>
+	<true/>
+  <key>pre_login</key>
+  <dict>
+    <key>organization</key>
+    <string>mycompany</string>
+    <key>auth_client_id</key>
+    <string>88bf3b6d86161464f6509f7219099e57.access</string>
+    <key>auth_client_secret</key>
+    <string>bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5</string>
+  </dict>
+  <key>configs</key>
+  <array>
+		<dict>
+			<key>organization</key>
+			<string>mycompany</string>
+			<key>display_name</key>
+			<string>Production environment</string>
+  	</dict>
+		<dict>
+			<key>organization</key>
+			<string>test-org</string>
+			<key>display_name</key>
+			<string>Test environment</string>
+		</dict>
+  </array>
+</dict>
+```
+
+Switching to multi-user mode will require a user to re-register even if they had a previous registration.
+
+## Registration logic
+
+The following flowchart shows how WARP registration settings take effect as users log in and out:
+
+```mermaid
+flowchart TB
+    start(["Enable multi-user mode"])-->reg["Active Windows user is prompted to register WARP"]
+		reg--"Log out of Windows"-->prelogin{{"Is there a pre-login <br />registration?"}}
+		prelogin--"Yes"-->preloginyes
+		prelogin-. "No" .->preloginno
+
+    subgraph preloginbehavior["Windows login screen"]
+    preloginyes["Use pre-login settings"]
+		preloginno["Stay registered as previous Windows user"]
+		end
+
+		preloginbehavior--"Log in to Windows"-->regexists{{"Has the user already registered with WARP?"}}
+		regexists--"Yes"-->user["Switch to that user's registration"]
+		regexists-. "No" .->reg
+		user--"Log out of Windows"--> prelogin
+```
+
