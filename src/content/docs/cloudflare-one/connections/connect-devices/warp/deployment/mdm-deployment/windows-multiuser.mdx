@@ -37,11 +37,17 @@ To enable multi-user support on Windows, [deploy an MDM file](/cloudflare-one/co
 ```xml
 <dict>
   <key>multi_user</key>
-	<true/>
-  <key>organization</key>
-  <string>your-team-name</string>
-  <key>onboarding</key>
-  <false/>
+  <true/>
+  </dict>
+  <key>configs</key>
+  <array>
+    <dict>
+      <key>organization</key>
+      <string>your-team-name</string>
+      <key>display_name</key>
+      <string>Default</string>
+    </dict>
+  </array>
 </dict>
 ```
 
