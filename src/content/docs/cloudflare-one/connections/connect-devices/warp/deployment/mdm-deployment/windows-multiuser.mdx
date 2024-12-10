@@ -93,16 +93,17 @@ The following flowchart shows how WARP registration settings take effect as user
 ```mermaid
 flowchart TB
     start(["Enable multi-user mode"])-->reg["Active Windows user is prompted to register WARP"]
-		reg--"Log out of Windows"-->prelogin{{"Is there a pre-login <br />registration?"}}
-		prelogin--"Yes"-->preloginyes
-		prelogin-. "No" .->preloginno
+		reg--"Log out of Windows"-->prelogin
 
     subgraph preloginbehavior["Windows login screen"]
+		prelogin{{"Is there a pre-login <br />registration?"}}
     preloginyes["Use pre-login settings"]
-		preloginno["Stay registered as previous Windows user"]
+		prelogin--"Yes"-->preloginyes
+		prelogin-. "No" .->preloginno
+		preloginno["Stay registered as <br />previous Windows user"]
 		end
 
-		preloginbehavior--"Log in to Windows"-->regexists{{"Has the user already registered with WARP?"}}
+		preloginbehavior--"Log in to Windows"---->regexists{{"Has the user already registered with WARP?"}}
 		regexists--"Yes"-->user["Switch to that user's registration"]
 		regexists-. "No" .->reg
 		user--"Log out of Windows"--> prelogin
