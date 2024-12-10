@@ -87,14 +87,32 @@ If switch has been turned off by user, the client will automatically turn itself
 This parameter replaces the old `enabled` property, which can no longer be used in conjunction with the new `switch_locked` and `auto_connect`. If you want to use these parameters, you must remove `enabled`.
 :::
 
+### `configs`
+
+Allows a user to [switch between Zero Trust organizations](/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/switch-organizations/) in the WARP client GUI. The `configs` array is also required when using a top-level parameter such as [`pre-login`](#pre_login) or [`multi-user`](#multi_user), even if only one organization is specified.
+
+**Value Type:** `array`
+
+**Value:** An array containing one or more Zero Trust organizations.
 
 ### `display_name`
 
-When WARP is deployed with [multiple organizations or configurations](/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/switch-organizations/), this parameter is used to identify each configuration in the GUI.
+Identifies a Zero Trust organization in the WARP GUI when WARP is deployed with [multiple organizations](/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/switch-organizations/). Required if the `organization` parameter is specified within a [`configs` array](#configs).
 
 **Value Type:** `string`
 
-**Value:** Configuration name shown in the GUI (for example, `Test environment`).
+**Value:** Organization nickname shown to users in the WARP GUI (for example, `Test environment`).
+
+### `multi_user`
+
+Enables multiple user registrations on a Windows device.
+
+**Value Type:** `boolean`
+
+**Value:**
+
+* `false` — (default) Only one WARP registration is stored per device. After a user logs in to WARP, their settings and identity will apply to all traffic from the device.
+* `true` — Each Windows user has their own WARP registration. For more information, refer to [Multiple users on a Windows device](/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/).
 
 ### `onboarding`
 
@@ -106,7 +124,6 @@ Controls the visibility of the onboarding screens that ask the user to review th
 
 * `false` — Screens hidden.
 * `true` — (default) Screens visible.
-
 
 ### `override_api_endpoint`
 
@@ -143,6 +160,10 @@ This functionality is intended for use with a Cloudflare China local network par
 **Value:** `203.0.113.0:500` — Redirect all WARP traffic to `203.0.113.0` on port `500`.
 
 The string must be a valid IPv4 or IPv6 socket address (containing the IP address and port number), otherwise the WARP client will fail to parse the entire MDM file.
+
+### `pre_login`
+
+Allows WARP to connect with a service token before a user completes the initial Windows login. For more information, refer to [Connect WARP before Windows login](/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-prelogin/).
 
 ### `service_mode`
 
