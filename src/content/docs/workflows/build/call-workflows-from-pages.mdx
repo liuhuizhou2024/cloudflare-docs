@@ -123,10 +123,11 @@ Your [Pages Function](/pages/functions/get-started/) can then make a regular `fe
 export const onRequest: PagesFunction<Env> = async (context) => {
 	// Other code
 	let payload = {"hello": "world"}
-  const instanceStatus = fetch("https://YOUR_WORKER.workers.dev/", {
+  const instanceStatus = await fetch("https://YOUR_WORKER.workers.dev/", {
   	method: "POST",
-    body: JSON.stringify(payload) // Send a paylod for our Worker to pass to the Workflow
-  }
+    body: JSON.stringify(payload) // Send a payload for our Worker to pass to the Workflow
+  })
+
   return Response.json(instanceStatus);
 };
 ```
