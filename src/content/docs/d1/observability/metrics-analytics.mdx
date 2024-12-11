@@ -158,7 +158,7 @@ Run `wrangler d1 insights --help` to view current options.
 | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
 | `--timePeriod`     | Fetch data from now to the provided time period (default: `1d`).                                                 |
 | `--sort-type`      | The operation you want to sort insights by. Select between `sum` and `avg` (default: `sum`).                     |
-| `sort-by`          | The field you want to sort insights by. Select between `time`, `reads`, `writes`, and `count` (default: `time`). |
+| `--sort-by`        | The field you want to sort insights by. Select between `time`, `reads`, `writes`, and `count` (default: `time`). |
 | `--sort-direction` | The sort direction. Select between `ASC` and `DESC` (default: `DESC`).                                           |
 | `--json`           | A boolean value to specify whether to return the result as clean JSON (default: `false`).                        |
 | `--limit`          | The maximum number of queries to be fetched.                                                                     |
@@ -320,7 +320,7 @@ npx wrangler d1 insights <database_name> --sort-type=sum --sort-by=writes --limi
 </Details>
 
 :::note
-The quantity `queryEfficiency` measures how efficient your query was. It is calculated as "the number of rows returned, divided by the number of rows read".
+The quantity `queryEfficiency` measures how efficient your query was. It is calculated as: the number of rows returned divided by the number of rows read.
 
 Generally, you should try to get `queryEfficiency` as close to `1` as possible. Refer to [Use indexes](/d1/best-practices/use-indexes/) for more information on efficient querying.
 :::
