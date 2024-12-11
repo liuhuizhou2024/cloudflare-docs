@@ -5,7 +5,7 @@ sidebar:
   order: 11
 ---
 
-import { TypeScriptExample } from "~/components";
+import { WranglerConfig, TypeScriptExample } from "~/components";
 
 You can bind and trigger Workflows from [Pages Functions](/pages/functions/) by deploying a Workers project with your Workflow definition and then invoking that Worker using [service bindings](/pages/functions/bindings/#service-bindings) or a standard `fetch()` call.
 
@@ -28,13 +28,11 @@ To do this, you:
 For example, if you have a Worker called `workflows-starter`, you would create a new Service Binding in your Pages project as follows, ensuring that the `service` name matches the name of the Worker your Workflow is defined in:
 
 <WranglerConfig>
-
 ```toml
 services = [
   { binding = "WORKFLOW_SERVICE", service = "workflows-starter" }
 ]
 ```
-
 </WranglerConfig>
 
 Your Worker can expose a specific method (or methods) that only other Workers or Pages Functions can call over the Service Binding.
