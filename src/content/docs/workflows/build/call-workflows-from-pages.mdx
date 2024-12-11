@@ -19,7 +19,7 @@ You will need to deploy your Workflow as a standalone Workers project first befo
 
 [Service Bindings](/workers/runtime-apis/bindings/service-bindings/) allow you to call a Worker from another Worker or a Pages Function without needing to expose it directly.
 
-To do this, you:
+To do this, you will need to:
 
 1. Deploy your Workflow in a Worker
 2. Create a Service Binding to that Worker in your Pages project
@@ -69,7 +69,7 @@ export default class WorkflowsService extends WorkerEntrypoint<Env> {
 ```
 </TypeScriptExample>
 
-Your Pages Function would resemble the followijng:
+Your Pages Function would resemble the following:
 
 <TypeScriptExample filename="functions/request.ts">
 ```ts
@@ -89,7 +89,7 @@ Visit the [bindings documentation for Pages Functions](/pages/functions/bindings
 
 ### Using fetch
 
-:::note
+:::note "Service Bindings vs. fetch"
 
 We recommend using [Service Bindings](/workers/runtime-apis/bindings/service-bindings/) when calling a Worker in your own account.
 
@@ -134,3 +134,9 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 </TypeScriptExample>
 
 You can also choose to authenticate these requests by passing a shared secret in a header and validating that in your Worker.
+
+### Next steps
+
+* Learn more about how to programatically call and trigger Workflows from the [Workers API](/workflows/build/workers-api/)
+* Understand how to send [events and parameters](/workflows/builds/events-and-parameters/) when triggering a Workflow
+* Review the [Rules of Workflows](/workflows/build/rules-of-workflows/) and best practices for writing Workflows
